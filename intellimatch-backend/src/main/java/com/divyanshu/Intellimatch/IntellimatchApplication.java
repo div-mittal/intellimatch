@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class IntellimatchApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(IntellimatchApplication.class, args);
 	}
 
