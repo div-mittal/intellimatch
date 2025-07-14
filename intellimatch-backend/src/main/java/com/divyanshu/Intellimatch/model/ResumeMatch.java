@@ -1,0 +1,44 @@
+package com.divyanshu.Intellimatch.model;
+
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Date;
+
+@Data
+@Document(collection = "resume_matches")
+public class ResumeMatch {
+    @Id
+    String id;
+    String resumeUrl;
+    String jobDescriptionUrl;
+    Date matchDate;
+    double score;
+    String resultMessage;
+
+
+    public ResumeMatch(String id, String resumeUrl, String jobDescriptionUrl, double score, String resultMessage) {
+        this.id = id;
+        this.resumeUrl = resumeUrl;
+        this.jobDescriptionUrl = jobDescriptionUrl;
+        this.matchDate = new Date();
+        this.score = score;
+        this.resultMessage = resultMessage;
+    }
+    
+    public ResumeMatch() {
+        // Default constructor
+    }
+
+    @Override
+    public String toString() {
+        return "ResumeMatch{" +
+                "id='" + id + '\'' +
+                ", resumeUrl='" + resumeUrl + '\'' +
+                ", jobDescriptionUrl='" + jobDescriptionUrl + '\'' +
+                ", score=" + score +
+                ", resultMessage='" + resultMessage + '\'' +
+                '}';
+    }
+}
