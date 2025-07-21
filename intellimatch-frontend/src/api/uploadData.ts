@@ -7,13 +7,16 @@ export async function uploadData(resume: File, jobDescription: File): Promise<an
     const response = await fetch('/api/upload', {
       method: 'POST',
       body: formData,
+      credentials: 'include',
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(data?.message || data || `HTTP error! status: ${response.status}`);
     }
 
-    return await response.json();
+    return data;
   } catch (error) {
     console.error('Error uploading files:', error);
     throw error;

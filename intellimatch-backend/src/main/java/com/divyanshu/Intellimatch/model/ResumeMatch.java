@@ -11,6 +11,8 @@ import java.util.Date;
 public class ResumeMatch {
     @Id
     String id;
+    String resumeName;
+    String jobDescriptionName;
     String resumeUrl;
     String jobDescriptionUrl;
     Date matchDate;
@@ -18,8 +20,10 @@ public class ResumeMatch {
     String resultMessage;
 
 
-    public ResumeMatch(String id, String resumeUrl, String jobDescriptionUrl, double score, String resultMessage) {
+    public ResumeMatch(String id, String resumeName, String jobDescriptionName, String resumeUrl, String jobDescriptionUrl, double score, String resultMessage) {
         this.id = id;
+        this.resumeName = resumeName;
+        this.jobDescriptionName = jobDescriptionName;
         this.resumeUrl = resumeUrl;
         this.jobDescriptionUrl = jobDescriptionUrl;
         this.matchDate = new Date();
@@ -35,8 +39,11 @@ public class ResumeMatch {
     public String toString() {
         return "ResumeMatch{" +
                 "id='" + id + '\'' +
+                ", resumeName='" + resumeName + '\'' +
+                ", jobDescriptionName='" + jobDescriptionName + '\'' +
                 ", resumeUrl='" + resumeUrl + '\'' +
                 ", jobDescriptionUrl='" + jobDescriptionUrl + '\'' +
+                ", matchDate=" + matchDate +
                 ", score=" + score +
                 ", resultMessage='" + resultMessage + '\'' +
                 '}';

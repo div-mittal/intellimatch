@@ -56,18 +56,20 @@ export default function UploadPage() {
     setUploading(true);
     try {
       const response = await uploadData(resume, jobDescription);
-      if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData.message || 'An error occurred during upload.');
-        return;
-      }
-      const result = await response.json();
-      console.log('Upload successful:', result);
+      console.log('Upload successful:', response);
       
+      // Reset form on success
+      setResume(null);
+      setJobDescription(null);
       if (resumeRef.current) resumeRef.current.value = '';
       if (jdRef.current) jdRef.current.value = '';
-    } catch (err) {
-      setError('An error occurred during upload. Please try again.');
+      
+      // You might want to redirect to results page or show success message
+      // For now, just log success
+      alert('Files uploaded successfully!');
+    } catch (err: any) {
+      console.error('Upload error:', err);
+      setError(err.message || 'An error occurred during upload. Please try again.');
     } finally {
       setUploading(false);
     }

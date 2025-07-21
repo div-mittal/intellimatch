@@ -37,6 +37,9 @@ public class UploadController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication required.");
         }
 
+        System.out.println(resume);
+        System.out.println(jobDescription);
+
         try {
             User user = userService.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -48,17 +51,36 @@ public class UploadController {
             // check file types
             String resumeContentType = resume.getContentType();
             String jdContentType = jobDescription.getContentType();
-            if (resumeContentType == null || jdContentType == null ||
-                !resumeContentType.equals("application/pdf") || !jdContentType.equals("application/pdf")) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Only PDF files are allowed.");
+            
+            // Allowed content types
+            String[] allowedTypes = {
+                "application/pdf", 
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            };
+            
+            boolean isResumeValid = resumeContentType != null && 
+                (resumeContentType.equals(allowedTypes[0]) || resumeContentType.equals(allowedTypes[1]));
+            boolean isJdValid = jdContentType != null && 
+                (jdContentType.equals(allowedTypes[0]) || jdContentType.equals(allowedTypes[1]));
+                
+            if (!isResumeValid || !isJdValid) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Only PDF and DOCX files are allowed.");
             }
 
+            System.out.println("Uploading files for user: " + user.getName());
+            System.out.println("Resume file: " + resume.getOriginalFilename());
+            System.out.println("Job Description file: " + jobDescription.getOriginalFilename());
+
+            String resumeName = resume.getOriginalFilename();
+            String jobDescriptionName = jobDescription.getOriginalFilename();
 
             String resumeUrl = fileUploadService.uploadToS3(resume, "resumes");
             String jdUrl = fileUploadService.uploadToS3(jobDescription, "job-descriptions");
 
             ResumeMatch document = new ResumeMatch(
                 null,
+                resumeName,
+                jobDescriptionName,
                 resumeUrl,
                 jdUrl,
                 0.0,
