@@ -37,9 +37,6 @@ public class UploadController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication required.");
         }
 
-        System.out.println(resume);
-        System.out.println(jobDescription);
-
         try {
             User user = userService.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
