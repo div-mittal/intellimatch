@@ -22,7 +22,13 @@ public class FileUploadService {
     private String bucketName;
 
     public String uploadToS3(MultipartFile file, String folder) throws IOException {
-        String key = folder + "/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("File must not be empty");
+        }
+        String originalFileName = file.getOriginalFilename()
+                .replaceAll("[\\s+]+", "-") // Replace spaces and plus signs with -
+                .replaceAll("[^a-zA-Z0-9._-]", ""); // Remove any unsafe characters except . _ -
+        String key = folder + "/" + UUID.randomUUID() + "-" + originalFileName;
 
         PutObjectRequest request = PutObjectRequest.builder()
                 .bucket(bucketName)

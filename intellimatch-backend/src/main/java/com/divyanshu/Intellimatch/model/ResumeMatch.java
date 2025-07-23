@@ -16,19 +16,17 @@ public class ResumeMatch {
     String resumeUrl;
     String jobDescriptionUrl;
     Date matchDate;
-    double score;
-    String resultMessage;
+    String matchResultId;
 
 
-    public ResumeMatch(String id, String resumeName, String jobDescriptionName, String resumeUrl, String jobDescriptionUrl, double score, String resultMessage) {
+    public ResumeMatch(String id, String resumeName, String jobDescriptionName, String resumeUrl, String jobDescriptionUrl, String matchResultId) {
         this.id = id;
         this.resumeName = resumeName;
         this.jobDescriptionName = jobDescriptionName;
         this.resumeUrl = resumeUrl;
         this.jobDescriptionUrl = jobDescriptionUrl;
         this.matchDate = new Date();
-        this.score = score;
-        this.resultMessage = resultMessage;
+        this.matchResultId = matchResultId;
     }
     
     public ResumeMatch() {
@@ -44,8 +42,7 @@ public class ResumeMatch {
                 ", resumeUrl='" + resumeUrl + '\'' +
                 ", jobDescriptionUrl='" + jobDescriptionUrl + '\'' +
                 ", matchDate=" + matchDate +
-                ", score=" + score +
-                ", resultMessage='" + resultMessage + '\'' +
+                ", matchResultId='" + matchResultId + '\'' +
                 '}';
     }
 }

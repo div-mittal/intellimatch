@@ -10,7 +10,7 @@ export default function MatchPage() {
 
     useEffect(() => {
         const fetchMatchDetails = async () => {
-            const response = await fetch(`/api/match/${id}`);
+            const response = await fetch(`/api/user/match/${id}`);
             const data = await response.json();
             setMatchDetails(data);
         };

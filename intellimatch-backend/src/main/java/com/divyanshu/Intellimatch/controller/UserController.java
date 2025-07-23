@@ -4,11 +4,17 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.divyanshu.Intellimatch.dto.LoginRequest;
+import com.divyanshu.Intellimatch.dto.MatchHistoryDTO;
+import com.divyanshu.Intellimatch.model.MatchResult;
+import com.divyanshu.Intellimatch.model.ResumeMatch;
 import com.divyanshu.Intellimatch.model.User;
+import com.divyanshu.Intellimatch.repository.MatchResultRepository;
 import com.divyanshu.Intellimatch.service.UserService;
 import lombok.RequiredArgsConstructor;
 import jakarta.validation.Valid;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -17,6 +23,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final MatchResultRepository matchResultRepository;
 
     // Login route
     @PostMapping("/login")
@@ -114,9 +121,50 @@ public class UserController {
         try {
             User user = userService.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-            return ResponseEntity.ok(user.getHistory());
+            
+            // Convert ResumeMatch list to MatchHistoryDTO list
+            List<MatchHistoryDTO> historyDTOs = new ArrayList<>();
+            for (ResumeMatch resumeMatch : user.getHistory()) {
+                MatchResult matchResult = null;
+                if (resumeMatch.getMatchResultId() != null) {
+                    matchResult = matchResultRepository.findById(resumeMatch.getMatchResultId()).orElse(null);
+                }
+                historyDTOs.add(new MatchHistoryDTO(resumeMatch, matchResult));
+            }
+            
+            return ResponseEntity.ok(historyDTOs);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error: " + e.getMessage());
         } 
+    }
+
+    @GetMapping("/match/{matchId}")
+    public ResponseEntity<?> getMatchDetails(
+        @PathVariable String matchId,
+        @CookieValue(value = "userId", required = false) String userId
+    ) {
+        if (userId == null || userId.isEmpty()) {
+            return ResponseEntity.status(401).body("Authentication required.");
+        }
+
+        try {
+            User user = userService.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+            
+            // Find the specific match in user's history
+            ResumeMatch resumeMatch = user.getHistory().stream()
+                .filter(match -> match.getId().equals(matchId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Match not found"));
+            
+            MatchResult matchResult = null;
+            if (resumeMatch.getMatchResultId() != null) {
+                matchResult = matchResultRepository.findById(resumeMatch.getMatchResultId()).orElse(null);
+            }
+            
+            return ResponseEntity.ok(new MatchHistoryDTO(resumeMatch, matchResult));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.divyanshu.Intellimatch.controller;
 
-import com.divyanshu.Intellimatch.repository.ResumeMatchRepository;
+import com.divyanshu.Intellimatch.service.ResumeMatchService;
 import com.divyanshu.Intellimatch.service.UserService;
 import com.divyanshu.Intellimatch.model.ResumeMatch;
 import com.divyanshu.Intellimatch.model.User;
@@ -23,7 +23,7 @@ import java.io.IOException;
 public class UploadController {
 
     private final FileUploadService fileUploadService;
-    private final ResumeMatchRepository resumeRepo;
+    private final ResumeMatchService resumeMatchService;
     private final UserService userService;
 
     @PostMapping
@@ -76,11 +76,10 @@ public class UploadController {
                 jobDescriptionName,
                 resumeUrl,
                 jdUrl,
-                0.0,
-                "Uploaded successfully"
+                null // matchResultId will be set later after processing the match
             );
 
-            ResumeMatch savedMatch = resumeRepo.save(document);
+            ResumeMatch savedMatch = resumeMatchService.save(document);
             
             // Add to user's history
             user.addToHistory(savedMatch);

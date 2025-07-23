@@ -5,4 +5,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ResumeMatchRepository extends MongoRepository<ResumeMatch, String> {}
+public interface ResumeMatchRepository extends MongoRepository<ResumeMatch, String> {
+
+}
