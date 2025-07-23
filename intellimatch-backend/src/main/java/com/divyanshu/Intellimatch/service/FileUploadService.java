@@ -33,4 +33,12 @@ public class FileUploadService {
         s3Client.putObject(request, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
         return "https://" + bucketName + ".s3.amazonaws.com/" + key;
     }
+
+    public String uploadResume(MultipartFile resume) throws IOException {
+        return uploadToS3(resume, "resumes");
+    }
+
+    public String uploadJobDescription(MultipartFile jobDescription) throws IOException {
+        return uploadToS3(jobDescription, "job-descriptions");
+    }
 }

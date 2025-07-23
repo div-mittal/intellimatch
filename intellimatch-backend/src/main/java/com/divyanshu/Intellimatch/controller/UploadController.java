@@ -28,6 +28,7 @@ public class UploadController {
 
     @PostMapping
     public ResponseEntity<?> uploadFiles(
+        @RequestParam("jobRole") String jobRole,
         @RequestParam("resume") MultipartFile resume,
         @RequestParam("jobDescription") MultipartFile jobDescription,
         @CookieValue(value = "userId", required = false) String userId
@@ -40,6 +41,11 @@ public class UploadController {
         try {
             User user = userService.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+
+            if (jobRole == null || jobRole.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Job role is required.");
+            }
 
             if(resume == null || jobDescription == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Both files are required.");
@@ -67,11 +73,12 @@ public class UploadController {
             String resumeName = resume.getOriginalFilename();
             String jobDescriptionName = jobDescription.getOriginalFilename();
 
-            String resumeUrl = fileUploadService.uploadToS3(resume, "resumes");
-            String jdUrl = fileUploadService.uploadToS3(jobDescription, "job-descriptions");
+            String resumeUrl = fileUploadService.uploadResume(resume);
+            String jdUrl = fileUploadService.uploadJobDescription(jobDescription);
 
             ResumeMatch document = new ResumeMatch(
                 null,
+                jobRole,
                 resumeName,
                 jobDescriptionName,
                 resumeUrl,
