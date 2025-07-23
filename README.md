@@ -4,18 +4,24 @@ An AI-powered resume matching and rewriting system that analyzes resumes against
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Features](#features)
-- [Architecture](#architecture)
-- [Tech Stack](#tech-stack)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [API Documentation](#api-documentation)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
+- [Overview](#-overview)
+- [Features](#-features)
+- [Architecture](#️-architecture)
+- [Tech Stack](#️-tech-stack)
+- [Prerequisites](#-prerequisites)
+- [Installation](#-installation)
+- [Configuration](#️-configuration)
+- [Usage](#-usage)
+- [API Documentation](#-api-documentation)
+- [Project Structure](#-project-structure)
+- [Contributing](#-contributing)
+- [Development Commands](#-development-commands)
+- [Deployment](#-deployment)
+- [Security Features](#-security-features)
+- [Known Issues](#-known-issues)
+- [License](#-license)
+- [Author](#-author)
+- [Acknowledgments](#-acknowledgments)
 
 ## 🌟 Overview
 
