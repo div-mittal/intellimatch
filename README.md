@@ -18,8 +18,6 @@ An AI-powered resume matching and rewriting system that analyzes resumes against
 - [Development Commands](#-development-commands)
 - [Deployment](#-deployment)
 - [Security Features](#-security-features)
-- [Known Issues](#-known-issues)
-- [License](#-license)
 - [Author](#-author)
 - [Acknowledgments](#-acknowledgments)
 
@@ -241,9 +239,9 @@ jobDescription: <file>
 GET /api/user/history
 ```
 
-#### Get User by ID
+#### Get User Details
 ```http
-GET /api/user/get/{id}
+GET /api/user/get/
 ```
 
 ## 📁 Project Structure
@@ -346,17 +344,6 @@ The Next.js application can be deployed on:
 - CORS configuration for cross-origin requests
 - File type validation for uploads
 - File size limits (5MB max)
-
-## 🐛 Known Issues
-
-- NLP service is planned but not yet implemented
-- Match scoring algorithm needs AI integration
-- Email verification not implemented
-- Password reset functionality pending
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Author
 
