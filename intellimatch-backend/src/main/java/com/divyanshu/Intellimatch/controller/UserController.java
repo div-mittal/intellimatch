@@ -37,7 +37,7 @@ public class UserController {
             ResponseCookie cookie = ResponseCookie.from("userId", String.valueOf(user.getId()))
                     .httpOnly(true)
                     .path("/")
-                    .maxAge(24 * 60 * 60) // 1 day
+                    .maxAge(24 * 60 * 60)
                     .build();
 
             return ResponseEntity.ok()
@@ -60,7 +60,7 @@ public class UserController {
             ResponseCookie cookie = ResponseCookie.from("userId", String.valueOf(user.getId()))
                     .httpOnly(true)
                     .path("/")
-                    .maxAge(24 * 60 * 60) // 1 day
+                    .maxAge(24 * 60 * 60)
                     .build();
 
             return ResponseEntity.ok()
@@ -73,27 +73,30 @@ public class UserController {
         }
     }
 
-    @GetMapping("/get/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable String id) {
+    // Get user by ID route
+    @GetMapping("/get")
+    public ResponseEntity<?> getUserById(@CookieValue(value = "userId", required = false) String userId) {
+        if (userId == null || userId.isEmpty()) {
+            return ResponseEntity.status(401).body("Authentication required.");
+        }
+
         try {
-            Optional<User> userOpt = userService.findById(id);
-            if (userOpt.isEmpty()) {
-                return ResponseEntity.status(404).body("User not found");
-            }
-            return ResponseEntity.ok(userOpt.get());
+            User user = userService.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error: " + e.getMessage());
         }
     }
 
-    // Logout route (dummy implementation)
+    // Logout route
     @PostMapping("/logout")
     public ResponseEntity<?> logoutUser() {
-        // Implement token/session invalidation logic if needed
+        // Clear the userId cookie
         ResponseCookie cookie = ResponseCookie.from("userId", "")
                 .httpOnly(true)
                 .path("/")
-                .maxAge(0) // Expire the cookie
+                .maxAge(0)
                 .build();
         return ResponseEntity.ok()
                 .header(org.springframework.http.HttpHeaders.SET_COOKIE, cookie.toString())

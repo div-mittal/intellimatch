@@ -59,6 +59,13 @@
 			<version>2.20.0</version>
 		</dependency>
 
+		<!-- Environment Variables Support -->
+		<dependency>
+			<groupId>io.github.cdimascio</groupId>
+			<artifactId>dotenv-java</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
 		<!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>

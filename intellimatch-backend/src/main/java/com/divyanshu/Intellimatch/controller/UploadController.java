@@ -64,10 +64,6 @@ public class UploadController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Only PDF and DOCX files are allowed.");
             }
 
-            System.out.println("Uploading files for user: " + user.getName());
-            System.out.println("Resume file: " + resume.getOriginalFilename());
-            System.out.println("Job Description file: " + jobDescription.getOriginalFilename());
-
             String resumeName = resume.getOriginalFilename();
             String jobDescriptionName = jobDescription.getOriginalFilename();
 
