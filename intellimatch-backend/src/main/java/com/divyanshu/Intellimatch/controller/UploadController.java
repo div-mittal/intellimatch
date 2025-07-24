@@ -67,25 +67,53 @@ public class UploadController {
             String resumeName = resume.getOriginalFilename();
             String jobDescriptionName = jobDescription.getOriginalFilename();
 
-            String resumeUrl = fileUploadService.uploadResume(resume);
-            String jdUrl = fileUploadService.uploadJobDescription(jobDescription);
+            String resumeUrl = null;
+            String jdUrl = null;
+            ResumeMatch savedMatch = null;
 
-            ResumeMatch document = new ResumeMatch(
-                null,
-                resumeName,
-                jobDescriptionName,
-                resumeUrl,
-                jdUrl,
-                null // matchResultId will be set later after processing the match
-            );
+            try {
+                // Upload files to S3
+                resumeUrl = fileUploadService.uploadResume(resume);
+                jdUrl = fileUploadService.uploadJobDescription(jobDescription);
 
-            ResumeMatch savedMatch = resumeMatchService.save(document);
-            
-            // Add to user's history
-            user.addToHistory(savedMatch);
-            userService.save(user);
-            
-            return ResponseEntity.ok(savedMatch);
+                // Create and save ResumeMatch
+                ResumeMatch document = new ResumeMatch(
+                    null,
+                    user.getId(),
+                    resumeName,
+                    jobDescriptionName,
+                    resumeUrl,
+                    jdUrl,
+                    null // matchResultId will be set later after processing the match
+                );
+
+                savedMatch = resumeMatchService.save(document);
+                
+                if (savedMatch == null) {
+                    throw new RuntimeException("Failed to save match document");
+                }
+                
+                // Add to user's history
+                user.addToHistory(savedMatch);
+                User updatedUser = userService.save(user);
+                
+                if (updatedUser == null) {
+                    throw new RuntimeException("Failed to update user history");
+                }
+                
+                return ResponseEntity.ok(savedMatch);
+                
+            } catch (Exception uploadException) {
+                // Cleanup uploaded files if any step fails
+                if (resumeUrl != null || jdUrl != null) {
+                    fileUploadService.cleanupFiles(resumeUrl, jdUrl);
+                }
+                
+                // If match was saved but user history update failed, we let the async cleanup handle it
+                // since the async process will fail and trigger full cleanup
+                
+                throw uploadException; // Re-throw to be caught by outer catch block
+            }
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Upload failed.");
         }

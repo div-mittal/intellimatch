@@ -11,6 +11,7 @@ import java.util.Date;
 public class ResumeMatch {
     @Id
     String id;
+    String userId;
     String resumeName;
     String jobDescriptionName;
     String resumeUrl;
@@ -18,9 +19,9 @@ public class ResumeMatch {
     Date matchDate;
     String matchResultId;
 
-
-    public ResumeMatch(String id, String resumeName, String jobDescriptionName, String resumeUrl, String jobDescriptionUrl, String matchResultId) {
+    public ResumeMatch(String id, String userId, String resumeName, String jobDescriptionName, String resumeUrl, String jobDescriptionUrl, String matchResultId) {
         this.id = id;
+        this.userId = userId;
         this.resumeName = resumeName;
         this.jobDescriptionName = jobDescriptionName;
         this.resumeUrl = resumeUrl;

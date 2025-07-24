@@ -55,6 +55,10 @@ public class User {
         this.password = hashPassword(password);
     }
 
+    public void removeFromHistory(ResumeMatch resumeMatch) {
+        history.removeIf(match -> match.getId().equals(resumeMatch.getId()));
+    }
+
     private String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

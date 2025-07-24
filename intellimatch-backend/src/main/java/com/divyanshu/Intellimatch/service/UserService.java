@@ -40,7 +40,7 @@ public class UserService {
     public User save(User user) {
         return userRepository.save(user);
     }
-    
+
     private String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

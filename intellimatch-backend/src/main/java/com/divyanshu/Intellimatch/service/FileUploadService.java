@@ -17,6 +17,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 public class FileUploadService {
 
     private final S3Client s3Client;
+    private final FileDeleteService fileDeleteService;
 
     @Value("${aws.s3.bucket}")
     private String bucketName;
@@ -25,10 +26,16 @@ public class FileUploadService {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File must not be empty");
         }
-        String originalFileName = file.getOriginalFilename()
+        
+        String originalFileName = file.getOriginalFilename();
+        if (originalFileName == null || originalFileName.trim().isEmpty()) {
+            throw new IllegalArgumentException("File must have a valid name");
+        }
+        
+        String sanitizedFileName = originalFileName
                 .replaceAll("[\\s+]+", "-") // Replace spaces and plus signs with -
                 .replaceAll("[^a-zA-Z0-9._-]", ""); // Remove any unsafe characters except . _ -
-        String key = folder + "/" + UUID.randomUUID() + "-" + originalFileName;
+        String key = folder + "/" + UUID.randomUUID() + "-" + sanitizedFileName;
 
         PutObjectRequest request = PutObjectRequest.builder()
                 .bucket(bucketName)
@@ -46,5 +53,28 @@ public class FileUploadService {
 
     public String uploadJobDescription(MultipartFile jobDescription) throws IOException {
         return uploadToS3(jobDescription, "job-descriptions");
+    }
+    
+    /**
+     * Delete files from S3 in case of rollback/cleanup scenarios
+     */
+    public void cleanupFiles(String resumeUrl, String jobDescriptionUrl) {
+        try {
+            if (resumeUrl != null && !resumeUrl.isEmpty()) {
+                fileDeleteService.deleteResume(resumeUrl);
+            }
+        } catch (Exception e) {
+            // Log but don't fail the cleanup process
+            System.err.println("Failed to delete resume from S3: " + e.getMessage());
+        }
+        
+        try {
+            if (jobDescriptionUrl != null && !jobDescriptionUrl.isEmpty()) {
+                fileDeleteService.deleteJobDescription(jobDescriptionUrl);
+            }
+        } catch (Exception e) {
+            // Log but don't fail the cleanup process
+            System.err.println("Failed to delete job description from S3: " + e.getMessage());
+        }
     }
 }
