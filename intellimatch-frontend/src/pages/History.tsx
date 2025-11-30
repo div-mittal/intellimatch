@@ -28,9 +28,9 @@ export default function History() {
     // Apply sorting
     const sorted = [...matches].sort((a, b) => {
       if (sortBy === "date") {
-        return new Date(b.uploadDateTime).getTime() - new Date(a.uploadDateTime).getTime();
+        return new Date(b.matchDate).getTime() - new Date(a.matchDate).getTime();
       } else {
-        return b.atsScore - a.atsScore;
+        return b.score - a.score;
       }
     });
     setFilteredMatches(sorted);

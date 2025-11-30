@@ -17,7 +17,7 @@ export const MatchCard = ({ match }: MatchCardProps) => {
     return "destructive";
   };
 
-  const scoreVariant = getScoreVariant(match.atsScore);
+  const scoreVariant = getScoreVariant(match.score);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -37,19 +37,19 @@ export const MatchCard = ({ match }: MatchCardProps) => {
           <div className="flex-1 space-y-3">
             <div className="flex items-center gap-2 flex-wrap">
               <h3 className="font-semibold text-lg">
-                {match.jobTitle || match.resumeTitle || `Match #${match.matchId.slice(0, 8)}`}
+                {match.resumeName || `Match #${match.id.slice(0, 8)}`}
               </h3>
               <Badge
-                variant={match.status === "completed" ? "outline" : "secondary"}
+                variant={match.matchResult ? "outline" : "secondary"}
                 className="capitalize"
               >
-                {match.status}
+                {match.matchResult ? "completed" : "processing"}
               </Badge>
             </div>
 
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Calendar className="h-4 w-4" />
-              <span>{formatDate(match.uploadDateTime)}</span>
+              <span>{formatDate(match.matchDate)}</span>
             </div>
 
             <div className="flex items-center gap-3">
@@ -63,15 +63,15 @@ export const MatchCard = ({ match }: MatchCardProps) => {
                       scoreVariant === "warning" && "bg-warning",
                       scoreVariant === "destructive" && "bg-destructive"
                     )}
-                    style={{ width: `${match.atsScore}%` }}
+                    style={{ width: `${match.score}%` }}
                   />
                 </div>
-                <span className="font-bold text-sm">{match.atsScore}%</span>
+                <span className="font-bold text-sm">{match.score}%</span>
               </div>
             </div>
           </div>
 
-          <Link to={`/matches/${match.matchId}`}>
+          <Link to={`/match/${match.id}`}>
             <Button
               variant="ghost"
               size="sm"

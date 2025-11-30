@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,19 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Check if already logged in
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await authApi.getUser();
+        navigate("/dashboard");
+      } catch (error) {
+        // Not logged in, stay on register page
+      }
+    };
+    checkAuth();
+  }, [navigate]);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};

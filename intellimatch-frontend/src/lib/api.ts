@@ -1,6 +1,6 @@
-import { RegisterData, LoginData, User, MatchHistoryItem, MatchDetail } from "@/types";
+import { RegisterData, LoginData, User, MatchHistoryItem, MatchDetail, UploadResponse } from "@/types";
 
-const BASE_URL = "http://localhost:8090/api";
+const BASE_URL = "/api";
 
 // Helper function for API calls
 async function apiCall<T>(
@@ -42,24 +42,32 @@ export const authApi = {
   },
 
   logout: async () => {
-    return apiCall("/user/logout", {
+    const response = await fetch(`${BASE_URL}/user/logout`, {
       method: "POST",
+      credentials: "include",
     });
+
+    if (!response.ok) {
+      throw new Error("Logout failed");
+    }
+
+    // Backend returns plain text, not JSON
+    return response.text();
   },
 
   getUser: async (): Promise<User> => {
-    return apiCall<User>("/user/get/");
+    return apiCall<User>("/user/get");
   },
 };
 
 // Match APIs
 export const matchApi = {
-  upload: async (resume: File, jobDescription: File) => {
+  upload: async (resume: File, jobDescription: File): Promise<UploadResponse> => {
     const formData = new FormData();
     formData.append("resume", resume);
     formData.append("jobDescription", jobDescription);
 
-    return apiCall("/upload", {
+    return apiCall<UploadResponse>("/upload", {
       method: "POST",
       body: formData,
     });

@@ -61,12 +61,17 @@ export default function Upload() {
 
     setLoading(true);
     try {
-      await matchApi.upload(resume!, jobDescription!);
+      const response = await matchApi.upload(resume!, jobDescription!);
       toast({
         title: "Match created successfully!",
         description: "Analysis is in progress. This may take a moment.",
       });
-      navigate("/dashboard");
+      // Navigate to the match detail page with the returned match ID
+      if (response && response.id) {
+        navigate(`/match/${response.id}`);
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error: any) {
       toast({
         title: "Upload failed",
@@ -82,7 +87,7 @@ export default function Upload() {
     <Layout>
       <div className="container mx-auto px-4 py-8 max-w-2xl">
         <div className="space-y-2 mb-8">
-          <h1 className="text-4xl font-bold">Upload Match</h1>
+          <h1 className="text-4xl font-bold">Upload Documents</h1>
           <p className="text-muted-foreground text-lg">
             Upload your resume and job description for AI-powered ATS analysis
           </p>

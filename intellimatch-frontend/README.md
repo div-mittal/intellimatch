@@ -1,53 +1,87 @@
-# Welcome to your Lovable project
+# IntelliMatch Frontend
 
-## Project info
+## Project Description
 
-**URL**: https://lovable.dev/projects/050b80f1-10ed-499a-8aaf-a64828dacbb4
+IntelliMatch is an AI-powered resume and job description matching application that provides ATS (Applicant Tracking System) optimization analysis. This is the frontend application built with React, TypeScript, and Vite.
 
-## How can I edit this code?
+## Tech Stack
 
-There are several ways of editing your application.
+- **React 18** - UI Framework
+- **TypeScript** - Type Safety
+- **Vite** - Build Tool
+- **React Router** - Navigation
+- **TailwindCSS** - Styling
+- **shadcn/ui** - UI Components
+- **Tanstack Query** - Data Fetching
+- **Sonner** - Toast Notifications
 
-**Use Lovable**
+## Getting Started
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/050b80f1-10ed-499a-8aaf-a64828dacbb4) and start prompting.
+### Prerequisites
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js 18+ and npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- Backend server running on `http://localhost:8090`
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### Installation
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Step 1: Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Step 2: Navigate to the frontend directory
+cd intellimatch-frontend
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Step 3: Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The application will be available at `http://localhost:8080` (or `8081` if 8080 is in use).
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Available Scripts
 
-**Use GitHub Codespaces**
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
+## Project Structure
+
+```
+src/
+├── components/     # Reusable UI components
+├── hooks/          # Custom React hooks
+├── lib/            # Utility functions and API clients
+├── pages/          # Page components
+└── types/          # TypeScript type definitions
+```
+
+## Features
+
+- User Authentication (Login/Register)
+- Resume & Job Description Upload
+- AI-Powered Match Analysis
+- Match History Dashboard
+- Detailed Match Results with ATS Scoring
+- Protected Routes
+- Responsive Design
+
+## Backend Integration
+
+The frontend communicates with the backend API running at `http://localhost:8090`. API requests are proxied through Vite's dev server configuration.
+
+## Contributing
+
+1. Create a feature branch
+2. Make your changes
+3. Test thoroughly
+4. Submit a pull request
+
+## License
+
+Private Project
 - Edit files directly within the Codespace and commit and push your changes once you're done.
 
 ## What technologies are used for this project?

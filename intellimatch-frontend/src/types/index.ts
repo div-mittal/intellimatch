@@ -6,21 +6,35 @@ export interface User {
 }
 
 export interface MatchHistoryItem {
-  matchId: string;
-  uploadDateTime: string;
-  resumeTitle?: string;
-  jobTitle?: string;
-  atsScore: number;
-  status: "completed" | "processing" | "failed";
+  id: string;
+  resumeName: string;
+  jobDescriptionName: string;
+  resumeUrl: string;
+  jobDescriptionUrl: string;
+  matchDate: string;
+  score: number;
+  resultMessage: string;
+  matchResult: MatchResultData | null;
+}
+
+export interface MatchResultData {
+  id: string;
+  atsScorePercent: number;
+  summary: string;
+  whatMatched: MatchedItem[];
+  whatIsMissing: MissingItem[];
 }
 
 export interface MatchDetail {
-  matchId: string;
-  ats_score_percent: number;
-  summary: string;
-  what_matched: MatchedItem[];
-  what_is_missing: MissingItem[];
-  uploadDateTime: string;
+  id: string;
+  resumeName: string;
+  jobDescriptionName: string;
+  resumeUrl: string;
+  jobDescriptionUrl: string;
+  matchDate: string;
+  score: number;
+  resultMessage: string;
+  matchResult: MatchResultData | null;
 }
 
 export interface MatchedItem {
@@ -43,4 +57,15 @@ export interface RegisterData {
 export interface LoginData {
   email: string;
   password: string;
+}
+
+export interface UploadResponse {
+  id: string;
+  userId: string;
+  resumeName: string;
+  jobDescriptionName: string;
+  resumeUrl: string;
+  jobDescriptionUrl: string;
+  matchDate: string;
+  matchResultId: string | null;
 }

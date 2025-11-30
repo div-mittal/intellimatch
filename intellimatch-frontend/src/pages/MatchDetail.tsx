@@ -74,7 +74,26 @@ export default function MatchDetail() {
     );
   }
 
-  if (!match) return null;
+  if (!match || !match.matchResult) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-8">
+          <Card className="text-center py-12">
+            <CardContent>
+              <AlertTriangle className="h-12 w-12 mx-auto text-warning mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Analysis in progress</h3>
+              <p className="text-muted-foreground mb-4">
+                The match result is still being processed. Please check back later.
+              </p>
+              <Link to="/history">
+                <Button>Back to History</Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -93,7 +112,7 @@ export default function MatchDetail() {
               <h1 className="text-4xl font-bold">Match Analysis</h1>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Calendar className="h-4 w-4" />
-                <span>{formatDate(match.uploadDateTime)}</span>
+                <span>{formatDate(match.matchDate)}</span>
               </div>
             </div>
           </div>
@@ -104,22 +123,22 @@ export default function MatchDetail() {
           {/* Score Card */}
           <Card className="shadow-elegant lg:col-span-1">
             <CardContent className="flex flex-col items-center justify-center py-12">
-              <ScoreBadge score={match.ats_score_percent} size="lg" />
+              <ScoreBadge score={match.matchResult.atsScorePercent} size="lg" />
               <div className="mt-6 text-center">
                 <p className="text-sm text-muted-foreground mb-2">Overall Match Quality</p>
                 <Badge
                   variant={
-                    match.ats_score_percent >= 75
+                    match.matchResult.atsScorePercent >= 75
                       ? "default"
-                      : match.ats_score_percent >= 50
+                      : match.matchResult.atsScorePercent >= 50
                       ? "secondary"
                       : "destructive"
                   }
                   className="text-sm"
                 >
-                  {match.ats_score_percent >= 75
+                  {match.matchResult.atsScorePercent >= 75
                     ? "Excellent Match"
-                    : match.ats_score_percent >= 50
+                    : match.matchResult.atsScorePercent >= 50
                     ? "Good Match"
                     : "Needs Improvement"}
                 </Badge>
@@ -135,7 +154,7 @@ export default function MatchDetail() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-foreground leading-relaxed">{match.summary}</p>
+              <p className="text-foreground leading-relaxed">{match.matchResult.summary}</p>
             </CardContent>
           </Card>
         </div>
@@ -149,11 +168,11 @@ export default function MatchDetail() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {match.what_matched.length === 0 ? (
+            {match.matchResult.whatMatched.length === 0 ? (
               <p className="text-muted-foreground">No specific matches identified.</p>
             ) : (
               <div className="space-y-4">
-                {match.what_matched.map((item, index) => (
+                {match.matchResult.whatMatched.map((item, index) => (
                   <div
                     key={index}
                     className="flex gap-4 p-4 bg-success/5 border border-success/20 rounded-lg"
@@ -179,13 +198,13 @@ export default function MatchDetail() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {match.what_is_missing.length === 0 ? (
+            {match.matchResult.whatIsMissing.length === 0 ? (
               <p className="text-muted-foreground">
                 Great! Your resume covers all key requirements.
               </p>
             ) : (
               <div className="space-y-4">
-                {match.what_is_missing.map((item, index) => (
+                {match.matchResult.whatIsMissing.map((item, index) => (
                   <div
                     key={index}
                     className="flex gap-4 p-4 bg-warning/5 border border-warning/20 rounded-lg"

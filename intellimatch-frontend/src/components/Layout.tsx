@@ -18,17 +18,15 @@ export const Layout = ({ children }: LayoutProps) => {
   const handleLogout = async () => {
     try {
       await authApi.logout();
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      // Always redirect to login and clear state, even if API call fails
       toast({
         title: "Logged out successfully",
         description: "Come back soon!",
       });
-      navigate("/login");
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to logout. Please try again.",
-        variant: "destructive",
-      });
+      window.location.href = "/login";
     }
   };
 

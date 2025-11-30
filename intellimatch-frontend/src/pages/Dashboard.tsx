@@ -28,7 +28,11 @@ export default function Dashboard() {
         matchApi.getHistory(),
       ]);
       setUser(userData);
-      setMatches(matchHistory);
+      // Sort matches by most recent first
+      const sortedMatches = matchHistory.sort((a, b) => 
+        new Date(b.matchDate).getTime() - new Date(a.matchDate).getTime()
+      );
+      setMatches(sortedMatches);
     } catch (error: any) {
       if (error.message.includes("401") || error.message.includes("Unauthorized")) {
         toast({
@@ -49,11 +53,11 @@ export default function Dashboard() {
     }
   };
 
-  const completedMatches = matches.filter((m) => m.status === "completed");
+  const completedMatches = matches.filter((m) => m.matchResult !== null);
   const avgScore =
     completedMatches.length > 0
       ? Math.round(
-          completedMatches.reduce((sum, m) => sum + m.atsScore, 0) / completedMatches.length
+          completedMatches.reduce((sum, m) => sum + m.score, 0) / completedMatches.length
         )
       : 0;
 
@@ -160,7 +164,7 @@ export default function Dashboard() {
           ) : (
             <div className="space-y-4">
               {matches.slice(0, 5).map((match) => (
-                <MatchCard key={match.matchId} match={match} />
+                <MatchCard key={match.id} match={match} />
               ))}
             </div>
           )}
