@@ -19,7 +19,7 @@ load_dotenv()
 # Initialize Flask app
 app = Flask(__name__)
 
-# Enable CORS to allow requests from your Next.js frontend
+# Enable CORS to allow requests from your Spring Boot backend
 CORS(app) 
 
 # Define a temporary directory to store uploaded files

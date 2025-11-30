@@ -8,7 +8,7 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 def extract_resume_data_with_llm(text):
     """Analyzes resume text using Gemini and returns structured JSON."""
     print("Extracting resume data with Gemini...")
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-flash')
     prompt = f"""
     You are an expert HR data extraction system. Analyze the following resume text and convert it into a structured JSON object.
     Follow this exact JSON structure:
@@ -46,7 +46,7 @@ def extract_resume_data_with_llm(text):
 
 def extract_jd_data_with_llm(text):
     """Analyzes job description text using Gemini and returns structured JSON."""
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-flash')
     prompt = f"""
     You are an expert recruitment data analyst. Analyze the following job description and extract key skills, technologies, and qualifications into a structured JSON object.
     Use keys like "required_qualifications", "preferred_skills", "responsibilities". The values should be arrays of concise keywords.
@@ -76,7 +76,7 @@ def extract_jd_data_with_llm(text):
 
 def analyze_match_with_llm(resume_data, jd_data):
     """Compares resume and JD data using Gemini and returns a final analysis report."""
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-flash')
     resume_json_str = json.dumps(resume_data, indent=2)
     jd_json_str = json.dumps(jd_data, indent=2)
     prompt = f"""
